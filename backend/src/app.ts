@@ -1,14 +1,11 @@
 import express from "express";
 import cors from "cors";
-
 import authRoutes from "./routes/authRoutes";
 import templateRoutes from "./routes/templateRoutes";
 import customerRoutes from "./routes/customerRoutes";
-
+import segmentRoutes from "./routes/segmentRoutes";
 const app = express();
-
 app.use(cors());
-
 app.use(express.json());
 
 // Home route
@@ -26,5 +23,6 @@ app.use("/api/templates", templateRoutes);
 
 // Customer routes
 app.use("/api/customers", customerRoutes);
+app.use("/api/segments", segmentRoutes);
 
 export default app;
