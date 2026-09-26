@@ -5,6 +5,10 @@ export const sendTestEmail = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+
+  console.log("========== EMAIL REQUEST RECEIVED ==========");
+  console.log("Body:", req.body);
+
   const { to, subject, html } = req.body;
 
   if (
@@ -15,19 +19,40 @@ export const sendTestEmail = async (
     !subject.trim() ||
     !html.trim()
   ) {
+    console.log("Invalid email request");
+
     res.status(400).json({
       message: "Please provide to, subject, and html.",
     });
+
     return;
   }
 
-  try {
-    const result = await sendEmail(to, subject, html);
-    res.status(200).json(result);
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Failed to send email.";
+  console.log("Calling Brevo...");
 
-    res.status(500).json({ message });
+  try {
+    const result = await sendEmail(
+      to,
+      subject,
+      html
+    );
+
+    console.log("Brevo response:", result);
+
+    res.status(200).json(result);
+
+  } catch (error) {
+
+    console.error("========== BREVO ERROR ==========");
+    console.error(error);
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Failed to send email.";
+
+    res.status(500).json({
+      message,
+    });
   }
 };

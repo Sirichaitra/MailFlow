@@ -1,4 +1,3 @@
-
 import { BrevoClient } from "@getbrevo/brevo";
 
 export const sendEmail = async (
@@ -6,8 +5,21 @@ export const sendEmail = async (
   subject: string,
   html: string
 ) => {
+
+  console.log("Starting Brevo email service...");
+
   const apiKey = process.env.BREVO_API_KEY;
   const fromEmail = process.env.BREVO_FROM_EMAIL;
+
+  console.log(
+    "Brevo API key exists:",
+    !!apiKey
+  );
+
+  console.log(
+    "Brevo sender email:",
+    fromEmail
+  );
 
   if (!apiKey) {
     throw new Error("BREVO_API_KEY is missing");
@@ -21,19 +33,24 @@ export const sendEmail = async (
     apiKey: apiKey,
   });
 
-  const result = await brevo.transactionalEmails.sendTransacEmail({
-    sender: {
-      name: "MailFlow",
-      email: fromEmail,
-    },
-    to: [
-      {
-        email: to,
+  console.log("Sending request to Brevo...");
+
+  const result =
+    await brevo.transactionalEmails.sendTransacEmail({
+      sender: {
+        name: "MailFlow",
+        email: fromEmail,
       },
-    ],
-    subject: subject,
-    htmlContent: html,
-  });
+      to: [
+        {
+          email: to,
+        },
+      ],
+      subject: subject,
+      htmlContent: html,
+    });
+
+  console.log("Brevo request completed.");
 
   return {
     message: "Email sent successfully",

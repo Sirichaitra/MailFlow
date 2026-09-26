@@ -5,7 +5,7 @@ import EmailTemplate from "../models/EmailTemplate";
 
 export const getAnalytics = async (req: Request, res: Response) => {
   try {
-    const userId = (req as any).user.id;
+    const userId = (req as any).user.userId;
 
     const totalCampaigns = await Campaign.countDocuments({
       createdBy: userId,
